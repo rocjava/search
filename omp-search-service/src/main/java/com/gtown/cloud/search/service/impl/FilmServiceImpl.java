@@ -1,8 +1,8 @@
-package com.gtown.cloud.search.service;
+package com.gtown.cloud.search.service.impl;
 
 import com.gtown.cloud.search.entity.Film;
-import com.gtown.cloud.search.interfaces.IFilmService;
 import com.gtown.cloud.search.repository.FilmRepository;
+import com.gtown.cloud.search.service.IFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

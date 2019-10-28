@@ -1,4 +1,4 @@
-package com.gtown.cloud.search.interfaces;/**
+package com.gtown.cloud.search.service;/**
  * @author penn
  * @since 2019/10/23
  */

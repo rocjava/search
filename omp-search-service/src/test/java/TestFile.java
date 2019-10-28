@@ -1,6 +1,6 @@
 import com.gtown.cloud.search.Application;
 import com.gtown.cloud.search.entity.Film;
-import com.gtown.cloud.search.interfaces.IFilmService;
+import com.gtown.cloud.search.service.IFilmService;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
