@@ -7,6 +7,7 @@ import com.gtown.cloud.search.entity.Item;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -130,6 +131,14 @@ public interface ItemRepository extends ElasticsearchRepository<Item,Long> {
     Stream<Item> findByBrandOrPrice(String brand, Integer price);
 
     /**
+     * 通过 brand 或者 >=price
+     * @param brand
+     * @param price
+     * @return
+     */
+    Stream<Item> findByBrandOrPriceAfter(String brand, Integer price);
+
+    /**
      * price范围查询
      * @param price1
      * @param price2
@@ -164,4 +173,12 @@ public interface ItemRepository extends ElasticsearchRepository<Item,Long> {
      * @return
      */
     Stream<Item> findByPriceAfter(Integer price1);
+
+    /**
+     * 通过 brand 或者 >=price
+     * @param brand
+     * @param price
+     * @return
+     */
+    Stream<Item> findByBrandAndCreateTimeAfterAndPriceAfter(String brand, Long createTime, Integer price);
 }

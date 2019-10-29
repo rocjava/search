@@ -16,10 +16,10 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
@@ -177,6 +177,12 @@ public class TestItem1 {
     }
 
     @Test
+    public void testMultiFieldOrMethod1() {
+        Stream<Item> items = this.itemRepository.findByBrandOrPriceAfter("华为", 388800);
+        items.forEach(e -> System.out.println(e.toString()));
+    }
+
+    @Test
     public void testMethodStream() {
         Stream<Item> items = this.itemRepository.findByBrandAndPrice("华为", 488800);
         items.forEach(e -> System.out.println(e.toString()));
@@ -209,6 +215,13 @@ public class TestItem1 {
     @Test
     public void testMethodStreamAfter() {
         Stream<Item> items = this.itemRepository.findByPriceAfter(288800);
+        items.forEach(e -> System.out.println(e.toString()));
+    }
+
+    @Test
+    public void findByBrandAndCreateTimeAfterAndPriceAfter() throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-29 00:00:00");
+        Stream<Item> items = this.itemRepository.findByBrandAndCreateTimeAfterAndPriceAfter("华为", date.getTime(), 388800);
         items.forEach(e -> System.out.println(e.toString()));
     }
 
@@ -263,6 +276,49 @@ public class TestItem1 {
             System.out.println(item);
         }
 
+    }
+
+    /**
+     * rangeQuery
+     */
+    @Test
+    public void testSelfDefinedMethod04() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.rangeQuery("price").from(488800).to(688800));
+        for (Item item:items){
+            System.out.println(item);
+        }
+
+    }
+
+    /**
+     * should
+     */
+    @Test
+    public void testSelfDefinedMethod05() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+        .should(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))
+        .should(QueryBuilders.matchQuery("brand", "小米 xiaomi XIAOMI")));
+        for (Item item:items){
+            System.out.println(item);
+        }
+
+    }
+
+    /**
+     * must and mustNot and filter
+     */
+    @Test
+    public void testSelfDefinedMethod06() throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-29 00:00:00");
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))
+                .must(QueryBuilders.matchQuery("attrs", "8G"))
+                .mustNot(QueryBuilders.matchQuery("isOnSale", "false"))
+                .filter(QueryBuilders.rangeQuery("price").from(688800))
+                .filter(QueryBuilders.rangeQuery("createTime").from(date.getTime())));
+        for (Item item:items){
+            System.out.println(item);
+        }
     }
 
     /**

@@ -56,14 +56,14 @@ public class TestItem2 {
         Item item4 = new Item(4L, "红米note", "32G|红色",  "手机" , "小米", 388800, false, "www.baidu.com", new Date());
 
 
-        Item item5 = new Item(5L, "华为META10", "32G|黑色",  "手机" , "huawei", 388800, true, "www.baidu.com", new Date());
+        Item item5 = new Item(5L, "华为META10", "8G|黑色",  "手机" , "huawei", 388800, true, "www.baidu.com", new Date());
         Item item6 = new Item(6L, "meta20", "16g|白色",  "手机" , "华为", 488800, true, "www.baidu.com", new Date());
         Item item7 = new Item(7L, "Huawei META30", "8G|土豪金",  "手机" , "HUAWEI", 588800, false, "www.baidu.com", new Date());
         Item item8 = new Item(8L, "荣耀9", "8G|红色",  "手机" , "华为huawei", 688800, true, "www.baidu.com", new Date());
         Item item9 = new Item(9L, "荣耀10", "16G|土豪金",  "手机" , "华为", 788800, true, "www.baidu.com", new Date());
         Item item10 = new Item(10L, "麦芒5", "32G|土豪金",  "手机" , "华为", 688800, true, "www.baidu.com", new Date());
-        Item item11 = new Item(11L, "麦芒6", "8G|红色",  "手机" , "华为", 688800, true, "www.baidu.com", new Date());
-        Item item12 = new Item(12L, "麦芒6", "8G|白色",  "手机" , "华为", 688800, true, "www.baidu.com", c.getTime());
+        Item item11 = new Item(11L, "麦芒6", "8G|红色",  "手机" , "华为", 688800, true, "www.baidu.com", c.getTime());
+        Item item12 = new Item(12L, "麦芒6", "8G|白色",  "手机" , "华为", 798800, true, "www.baidu.com", new Date());
 
         List<Item> list = Arrays.asList(item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12);
         itemRepository.saveAll(list);

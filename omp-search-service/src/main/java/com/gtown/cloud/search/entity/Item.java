@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,7 +15,6 @@ import java.util.Date;
  * @since 2019/10/22
  */
 @Data
-@ToString
 @Document(indexName = "test_index",type = "item", shards = 1, replicas = 0)
 public class Item {
 
@@ -59,5 +59,18 @@ public class Item {
         this.createTime = createTime;
     }
 
-
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", attrs='" + attrs + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", price=" + price +
+                ", isOnSale=" + isOnSale +
+                ", images='" + images + '\'' +
+                ", createTime=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:dd").format(createTime) +
+                '}';
+    }
 }
