@@ -1,10 +1,9 @@
-package com.gtown.cloud.search.service.impl;
+package com.es.search.service.impl;
 
-import com.gtown.cloud.search.entity.Item;
-import com.gtown.cloud.search.repository.ItemRepository;
-import com.gtown.cloud.search.service.IItemService;
+import com.es.search.entity.Item;
+import com.es.search.repository.ItemRepository;
+import com.es.search.service.IItemService;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -18,7 +17,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +60,7 @@ public class ItemServiceImpl implements IItemService {
     }
 
     @Override
-    public List<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
+    public Page<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
         SearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(QueryBuilders.boolQuery()
                         .must(QueryBuilders.matchQuery("brand", brand))
@@ -74,11 +72,11 @@ public class ItemServiceImpl implements IItemService {
                 .withSort(SortBuilders.fieldSort("price").order(SortOrder.DESC))
                 .build();
         Page<Item> items = this.itemRepository.search(query);
-        return items.getContent();
+        return items;
     }
 
     @Override
-    public List<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
+    public Page<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
         //查询条件
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder.must(QueryBuilders.matchQuery("brand", brand))
@@ -101,7 +99,7 @@ public class ItemServiceImpl implements IItemService {
                 .build();
 
         Page<Item> items = this.itemRepository.search(query);
-        return items.getContent();
+        return items;
     }
 
     @Override

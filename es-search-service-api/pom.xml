@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.penn</groupId>
-        <artifactId>omp-search</artifactId>
+        <artifactId>es-search</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>omp-search-service-api</artifactId>
+    <artifactId>es-search-service-api</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>omp-search-api</name>
+    <name>es-search-api</name>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>

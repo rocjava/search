@@ -1,4 +1,4 @@
-package com.gtown.cloud.search.utils;
+package com.es.search.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;

@@ -1,4 +1,4 @@
-package com.gtown.cloud.search;
+package com.es.search;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

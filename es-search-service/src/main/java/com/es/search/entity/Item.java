@@ -1,4 +1,4 @@
-package com.gtown.cloud.search.entity;
+package com.es.search.entity;
 
 import lombok.Data;
 import lombok.ToString;

@@ -1,6 +1,6 @@
-import com.gtown.cloud.search.Application;
-import com.gtown.cloud.search.entity.Item;
-import com.gtown.cloud.search.repository.ItemRepository;
+import com.es.search.Application;
+import com.es.search.entity.Item;
+import com.es.search.repository.ItemRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

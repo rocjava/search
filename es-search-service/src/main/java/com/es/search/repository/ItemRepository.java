@@ -1,13 +1,12 @@
-package com.gtown.cloud.search.repository;/**
+package com.es.search.repository;/**
  * @author penn
  * @since 2019/10/23
  */
 
-import com.gtown.cloud.search.entity.Item;
+import com.es.search.entity.Item;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 

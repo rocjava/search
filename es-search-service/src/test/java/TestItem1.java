@@ -1,7 +1,7 @@
-import com.gtown.cloud.search.Application;
-import com.gtown.cloud.search.entity.Item;
-import com.gtown.cloud.search.repository.ItemRepository;
-import com.gtown.cloud.search.service.IItemService;
+import com.es.search.Application;
+import com.es.search.entity.Item;
+import com.es.search.repository.ItemRepository;
+import com.es.search.service.IItemService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -17,7 +17,6 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -329,13 +328,13 @@ public class TestItem1 {
         }
 
         System.out.println("==============分割线排序===============");
-        List<Item> list1 = iItemService.multiFieldQueryWithSort("HUAWEI 华为 huawei", "8G", false, 688800, date);
+        Page<Item> list1 = iItemService.multiFieldQueryWithSort("HUAWEI 华为 huawei", "8G", false, 688800, date);
         for (Item item : list1) {
             System.out.println(item);
         }
 
         System.out.println("==============分割线分页===============");
-        List<Item> list2 = iItemService.multiFieldQueryWithSortWithPage(0, 10, "HUAWEI 华为 huawei", "8G", false, 688800, date);
+        Page<Item> list2 = iItemService.multiFieldQueryWithSortWithPage(0, 10, "HUAWEI 华为 huawei", "8G", false, 688800, date);
         for (Item item : list1) {
             System.out.println(item);
         }

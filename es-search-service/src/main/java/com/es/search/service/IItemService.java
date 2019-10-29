@@ -1,9 +1,10 @@
-package com.gtown.cloud.search.service;/**
+package com.es.search.service;/**
  * @author penn
  * @since 2019/10/23
  */
 
-import com.gtown.cloud.search.entity.Item;
+import com.es.search.entity.Item;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
@@ -41,7 +42,7 @@ public interface IItemService {
      * price
      * createTime
      */
-    List<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
+    Page<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
 
     /**
      * 多列查询带排序带分页
@@ -51,7 +52,7 @@ public interface IItemService {
      * price
      * createTime
      */
-    List<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
+    Page<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
 
     /**
      * 基于方法名称查询 ES会自动解析方法名称
