@@ -3,11 +3,24 @@ package com.gtown.cloud.search.service.impl;
 import com.gtown.cloud.search.entity.Item;
 import com.gtown.cloud.search.repository.ItemRepository;
 import com.gtown.cloud.search.service.IItemService;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -23,6 +36,73 @@ public class ItemServiceImpl implements IItemService {
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
+
+
+    /**
+     * 查询createTime之后创建的、售价大于price、在售的华为8G的手机
+     *
+     * @param brand      品牌
+     * @param attrs      属性
+     * @param isOnSale   是否在售
+     * @param price      价格
+     * @param createTime 创建时间 排序
+     * @return list
+     */
+    @Override
+    public List<Item> multiFieldQuery(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("brand", brand))
+                .must(QueryBuilders.matchQuery("attrs", attrs))
+                .mustNot(QueryBuilders.matchQuery("isOnSale", isOnSale.toString()))
+                .filter(QueryBuilders.rangeQuery("price").from(price))
+                .filter(QueryBuilders.rangeQuery("createTime").from(createTime.getTime())));
+        List<Item> list = new ArrayList<>();
+        items.forEach(e -> list.add(e));
+        return list;
+    }
+
+    @Override
+    public List<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
+        SearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.boolQuery()
+                        .must(QueryBuilders.matchQuery("brand", brand))
+                        .must(QueryBuilders.matchQuery("attrs", attrs))
+                        .mustNot(QueryBuilders.matchQuery("isOnSale", isOnSale.toString()))
+                        .filter(QueryBuilders.rangeQuery("price").from(price))
+                        .filter(QueryBuilders.rangeQuery("createTime").from(createTime.getTime())))
+                .withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
+                .withSort(SortBuilders.fieldSort("price").order(SortOrder.DESC))
+                .build();
+        Page<Item> items = this.itemRepository.search(query);
+        return items.getContent();
+    }
+
+    @Override
+    public List<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
+        //查询条件
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must(QueryBuilders.matchQuery("brand", brand))
+                .must(QueryBuilders.matchQuery("attrs", attrs))
+                .mustNot(QueryBuilders.matchQuery("isOnSale", isOnSale.toString()))
+                .filter(QueryBuilders.rangeQuery("price").from(price))
+                .filter(QueryBuilders.rangeQuery("createTime").from(createTime.getTime()));
+
+        //排序
+        FieldSortBuilder sortBuilder1 = SortBuilders.fieldSort("createTime").order(SortOrder.DESC);
+        FieldSortBuilder sortBuilder2 = SortBuilders.fieldSort("price").order(SortOrder.DESC);
+        //分页
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        SearchQuery query = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .withSort(sortBuilder1)
+                .withSort(sortBuilder2)
+                .withPageable(pageable)
+                .build();
+
+        Page<Item> items = this.itemRepository.search(query);
+        return items.getContent();
+    }
 
     @Override
     public List<Item> findByTitle(String title) {

@@ -1,5 +1,4 @@
 import com.gtown.cloud.search.Application;
-import com.gtown.cloud.search.entity.Film;
 import com.gtown.cloud.search.entity.Item;
 import com.gtown.cloud.search.repository.ItemRepository;
 import org.junit.Test;
@@ -41,7 +40,7 @@ public class TestItem2 {
 
     @Test
     public void testDeleteIndex() {
-        elasticsearchTemplate.deleteIndex(Film.class);
+        elasticsearchTemplate.deleteIndex(Item.class);
     }
 
 

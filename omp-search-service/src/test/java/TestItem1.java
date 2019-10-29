@@ -1,6 +1,7 @@
 import com.gtown.cloud.search.Application;
 import com.gtown.cloud.search.entity.Item;
 import com.gtown.cloud.search.repository.ItemRepository;
+import com.gtown.cloud.search.service.IItemService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -39,18 +40,18 @@ public class TestItem1 {
     @Autowired
     private ItemRepository itemRepository;
 
-
-
+    @Autowired
+    private IItemService iItemService;
 
     @Test
-    public void testQueryAll(){
+    public void testQueryAll() {
         // 查找所有
         //Iterable<Item> list = this.itemRepository.findAll();
         // 对某字段排序查找所有 Sort.by("price").descending() 降序
         // Sort.by("price").ascending():升序
         Iterable<Item> list = this.itemRepository.findAll(Sort.by("createTime").ascending());
 
-        for (Item item:list){
+        for (Item item : list) {
             System.out.println(item);
         }
     }
@@ -66,7 +67,7 @@ public class TestItem1 {
     @Test
     public void testFindByTitle() {
         List<Item> items = this.itemRepository.findByTitle("华为META10");
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -74,7 +75,7 @@ public class TestItem1 {
     @Test
     public void testFindByTitleNot() {
         List<Item> items = this.itemRepository.findByTitleNot("华为META10");
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -82,7 +83,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethod() {
         List<Item> items = this.itemRepository.findByTitleLike("华为MATA");
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -90,7 +91,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodAvailable() {
         List<Item> items = this.itemRepository.findByIsOnSaleTrue();
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -98,7 +99,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodNotAvailable() {
         List<Item> items = this.itemRepository.findByIsOnSaleFalse();
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -106,7 +107,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodNull() {
         List<Item> items = this.itemRepository.findByIsOnSaleIsNull();
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -114,7 +115,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodNull_() {
         List<Item> items = this.itemRepository.findByIsOnSale(null, PageRequest.of(0, 100));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -122,7 +123,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodStartingWith() {
         List<Item> items = this.itemRepository.findByTitleStartingWith("小米");
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -130,7 +131,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodStartsWith() {
         List<Item> items = this.itemRepository.findByTitleStartsWith("小米");
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -141,7 +142,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodEndingWith() {
         List<Item> items = this.itemRepository.findByTitleEndingWith("R1".toLowerCase());
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -152,7 +153,7 @@ public class TestItem1 {
     @Test
     public void testFieldMethodContaining() {
         List<Item> items = this.itemRepository.findByTitleContaining("META".toLowerCase());
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -231,7 +232,7 @@ public class TestItem1 {
     @Test
     public void testSelfDefinedMethod0() {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.multiMatchQuery("华为", "title", "brand"));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -244,7 +245,7 @@ public class TestItem1 {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery("brand", "华为"))
                 .filter(QueryBuilders.termQuery("title", "麦芒")));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
 
@@ -258,7 +259,7 @@ public class TestItem1 {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery("brand", "华为"))
                 .filter(QueryBuilders.matchQuery("attrs", "8G")));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
 
@@ -272,7 +273,7 @@ public class TestItem1 {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery("brand", "华为"))
                 .must(QueryBuilders.matchQuery("attrs", "8G|红色")));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
 
@@ -284,7 +285,7 @@ public class TestItem1 {
     @Test
     public void testSelfDefinedMethod04() {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.rangeQuery("price").from(488800).to(688800));
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
 
@@ -296,9 +297,9 @@ public class TestItem1 {
     @Test
     public void testSelfDefinedMethod05() {
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
-        .should(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))
-        .should(QueryBuilders.matchQuery("brand", "小米 xiaomi XIAOMI")));
-        for (Item item:items){
+                .should(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))
+                .should(QueryBuilders.matchQuery("brand", "小米 xiaomi XIAOMI")));
+        for (Item item : items) {
             System.out.println(item);
         }
 
@@ -310,13 +311,32 @@ public class TestItem1 {
     @Test
     public void testSelfDefinedMethod06() throws ParseException {
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-29 00:00:00");
+        System.out.println("==============分割线原始===============");
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))
                 .must(QueryBuilders.matchQuery("attrs", "8G"))
                 .mustNot(QueryBuilders.matchQuery("isOnSale", "false"))
                 .filter(QueryBuilders.rangeQuery("price").from(688800))
                 .filter(QueryBuilders.rangeQuery("createTime").from(date.getTime())));
-        for (Item item:items){
+        for (Item item : items) {
+            System.out.println(item);
+        }
+        System.out.println("==============分割线接口方式===============");
+        List<Item> list = iItemService.multiFieldQuery("HUAWEI 华为 huawei", "8G", false, 688800, date);
+
+        for (Item item : list) {
+            System.out.println(item);
+        }
+
+        System.out.println("==============分割线排序===============");
+        List<Item> list1 = iItemService.multiFieldQueryWithSort("HUAWEI 华为 huawei", "8G", false, 688800, date);
+        for (Item item : list1) {
+            System.out.println(item);
+        }
+
+        System.out.println("==============分割线分页===============");
+        List<Item> list2 = iItemService.multiFieldQueryWithSortWithPage(0, 10, "HUAWEI 华为 huawei", "8G", false, 688800, date);
+        for (Item item : list1) {
             System.out.println(item);
         }
     }
@@ -336,11 +356,10 @@ public class TestItem1 {
         System.out.println("当前页：" + items.getNumber());
         System.out.println("每页大小：" + items.getSize());
         System.out.println("内容大小：" + items.getNumberOfElements());
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
-
 
 
     /**
@@ -352,7 +371,7 @@ public class TestItem1 {
                 .withQuery(QueryBuilders.termQuery("title", "meta"))
                 .build();
         Page<Item> items = this.itemRepository.search(query);
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
@@ -369,7 +388,7 @@ public class TestItem1 {
                 .withSort(SortBuilders.fieldSort("brand").order(SortOrder.DESC))
                 .build();
         Page<Item> items = this.itemRepository.search(query);
-        for (Item item:items){
+        for (Item item : items) {
             System.out.println(item);
         }
     }
