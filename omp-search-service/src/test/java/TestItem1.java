@@ -1,7 +1,6 @@
 import com.gtown.cloud.search.Application;
 import com.gtown.cloud.search.entity.Item;
 import com.gtown.cloud.search.repository.ItemRepository;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -31,7 +30,7 @@ import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class TestES {
+public class TestItem1 {
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -40,32 +39,8 @@ public class TestES {
     @Autowired
     private ItemRepository itemRepository;
 
-    @Test
-    public void testCreateIndex() {
-        elasticsearchTemplate.createIndex(Item.class);
-    }
-
-    @Test
-    public void testAdd() {
-        Item item = new Item(8L, "华为麦芒20", "16G|白色",  "手机" , "1华为", 388800, true, "www.baidu.com");
-        item = itemRepository.save(item);
-        System.out.println(item.toString());
-    }
 
 
-    @Test
-    public void testBatchAdd(){
-        List<Item> list = new ArrayList<>();
-        list.add(new Item(1L, "小米2", "8G|红色", " 手机", "小米", 88800, true, "http://image.baidu.com/1.jpg"));
-        list.add(new Item(2L, "小米手机3", "32G|白色"," 手机", "小米", 188800, true, "http://image.baidu.com/2.jpg"));
-        list.add(new Item(3L, "坚果手机R1","8G|红色", " 手机", "锤子", 288800, false, "http://image.baidu.com/3.jpg"));
-        list.add(new Item(4L, "坚果手机R2", "16G|红色", " 手机", "锤子", 388800, false, "http://image.baidu.com/4.jpg"));
-        list.add(new Item(5L, "华为META10", "8G|红色", " 手机", "华为", 488800, true, "http://image.baidu.com/5.jpg"));
-        list.add(new Item(6L, "华为META20", "16G|银色", " 手机", "华为", 588800, true, "http://image.baidu.com/6.jpg"));
-        list.add(new Item(7L, "华为 META30", "32G|黑色", " 手机", "华为", 688800, false, "http://image.baidu.com/7.jpg"));
-
-        System.out.println(itemRepository.saveAll(list));
-    }
 
     @Test
     public void testQueryAll(){
@@ -73,7 +48,7 @@ public class TestES {
         //Iterable<Item> list = this.itemRepository.findAll();
         // 对某字段排序查找所有 Sort.by("price").descending() 降序
         // Sort.by("price").ascending():升序
-        Iterable<Item> list = this.itemRepository.findAll(Sort.by("id").ascending());
+        Iterable<Item> list = this.itemRepository.findAll(Sort.by("createTime").ascending());
 
         for (Item item:list){
             System.out.println(item);
@@ -235,6 +210,59 @@ public class TestES {
     public void testMethodStreamAfter() {
         Stream<Item> items = this.itemRepository.findByPriceAfter(288800);
         items.forEach(e -> System.out.println(e.toString()));
+    }
+
+    /**
+     * multiMatchQuery
+     */
+    @Test
+    public void testSelfDefinedMethod0() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.multiMatchQuery("华为", "title", "brand"));
+        for (Item item:items){
+            System.out.println(item);
+        }
+    }
+
+    /**
+     * boolQuery
+     */
+    @Test
+    public void testSelfDefinedMethod01() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("brand", "华为"))
+                .filter(QueryBuilders.termQuery("title", "麦芒")));
+        for (Item item:items){
+            System.out.println(item);
+        }
+
+    }
+
+    /**
+     * filter
+     */
+    @Test
+    public void testSelfDefinedMethod02() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("brand", "华为"))
+                .filter(QueryBuilders.matchQuery("attrs", "8G")));
+        for (Item item:items){
+            System.out.println(item);
+        }
+
+    }
+
+    /**
+     * boolQuery
+     */
+    @Test
+    public void testSelfDefinedMethod03() {
+        Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("brand", "华为"))
+                .must(QueryBuilders.matchQuery("attrs", "8G|红色")));
+        for (Item item:items){
+            System.out.println(item);
+        }
+
     }
 
     /**

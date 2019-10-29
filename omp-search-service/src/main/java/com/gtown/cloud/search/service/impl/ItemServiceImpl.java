@@ -5,6 +5,7 @@ import com.gtown.cloud.search.repository.ItemRepository;
 import com.gtown.cloud.search.service.IItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class ItemServiceImpl implements IItemService {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     @Override
     public List<Item> findByTitle(String title) {

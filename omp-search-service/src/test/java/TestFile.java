@@ -44,8 +44,9 @@ public class TestFile {
 
     @Test
     public void createIndex() {
-        elasticsearchTemplate.createIndex(Film.class);
-        elasticsearchTemplate.putMapping(Film.class);
+        elasticsearchTemplate.deleteIndex(Film.class);
+//        elasticsearchTemplate.createIndex(Film.class);
+//        elasticsearchTemplate.putMapping(Film.class);
     }
 
     @Test
