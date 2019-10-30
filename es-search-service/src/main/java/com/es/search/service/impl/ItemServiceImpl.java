@@ -38,13 +38,6 @@ public class ItemServiceImpl implements IItemService {
 
     /**
      * 查询createTime之后创建的、售价大于price、在售的华为8G的手机
-     *
-     * @param brand      品牌
-     * @param attrs      属性
-     * @param isOnSale   是否在售
-     * @param price      价格
-     * @param createTime 创建时间 排序
-     * @return list
      */
     @Override
     public List<Item> multiFieldQuery(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
@@ -59,6 +52,9 @@ public class ItemServiceImpl implements IItemService {
         return list;
     }
 
+    /**
+     * 查询createTime之后创建的、售价大于price、在售的华为8G的手机，并根据时间价格排序
+     */
     @Override
     public Page<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
         SearchQuery query = new NativeSearchQueryBuilder()
@@ -75,6 +71,9 @@ public class ItemServiceImpl implements IItemService {
         return items;
     }
 
+    /**
+     * 分页查询createTime之后创建的、售价大于price、在售的华为8G的手机，并根据时间价格排序
+     */
     @Override
     public Page<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime) {
         //查询条件

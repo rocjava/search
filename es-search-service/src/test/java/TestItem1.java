@@ -309,7 +309,7 @@ public class TestItem1 {
      */
     @Test
     public void testSelfDefinedMethod06() throws ParseException {
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-29 00:00:00");
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-10-30 00:00:00");
         System.out.println("==============分割线原始===============");
         Iterable<Item> items = this.itemRepository.search(QueryBuilders.boolQuery()
                 .must(QueryBuilders.matchQuery("brand", "HUAWEI 华为 huawei"))

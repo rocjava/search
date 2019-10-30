@@ -26,31 +26,36 @@ public interface IItemService {
      * mustNot() 不能有
      * should() 或者满足or
      * filter() 过滤
-     * brand
-     * attrs
-     * isOnSale
-     * price
-     * createTime
+     * @param brand 品牌
+     * @param attrs 属性
+     * @param isOnSale 是否在售
+     * @param price 价格
+     * @param createTime 创建时间
+     * @return List<Item>
      */
     List<Item> multiFieldQuery(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
 
     /**
      * 多列查询带排序
-     * brand
-     * attrs
-     * isOnSale
-     * price
-     * createTime
+     * @param brand 品牌
+     * @param attrs 属性
+     * @param isOnSale 是否在售
+     * @param price 价格
+     * @param createTime 创建时间
+     * @return List<Item>
      */
     Page<Item> multiFieldQueryWithSort(String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
 
     /**
      * 多列查询带排序带分页
-     * brand
-     * attrs
-     * isOnSale
-     * price
-     * createTime
+     * @param page 页数
+     * @param pageSize 每页条数
+     * @param brand 品牌
+     * @param attrs 属性
+     * @param isOnSale 是否在售
+     * @param price 价格
+     * @param createTime 创建时间
+     * @return List<Item>
      */
     Page<Item> multiFieldQueryWithSortWithPage(int page, int pageSize, String brand, String attrs, Boolean isOnSale, Integer price, Date createTime);
 

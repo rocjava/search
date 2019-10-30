@@ -15,7 +15,7 @@ import java.util.Date;
  * @since 2019/10/22
  */
 @Data
-@Document(indexName = "test_index",type = "item", shards = 1, replicas = 0)
+@Document(indexName = "test",type = "phone_item", shards = 1, replicas = 0)
 public class Item {
 
     @Id
@@ -27,10 +27,10 @@ public class Item {
     @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String attrs;
 
-    @Field(type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String category;
 
-    @Field(type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String brand;
 
     @Field(type = FieldType.Integer)
