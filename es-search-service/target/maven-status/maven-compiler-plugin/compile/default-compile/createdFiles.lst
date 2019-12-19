@@ -1,5 +1,0 @@
-com\es\search\service\IItemService.class
-com\es\search\service\impl\ItemServiceImpl.class
-com\es\search\entity\Item.class
-com\es\search\repository\ItemRepository.class
-com\es\search\Application.class
