@@ -11,5 +11,16 @@ spring:
     elasticsearch:
       cluster-name: my-application
       cluster-nodes: 127.0.0.1:9300
-      repositories:
-      enabled=true: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://xx.xx.xx.xx:xx/xx?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: xx
+    password: xx
+    hikari:
+      connection-test-query: select 1
+      maximum-pool-size: 100
+      minimum-idle: 10
+      max-lifetime: 30000
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.es.search.data.entity

@@ -1,0 +1,126 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.es.search.data.mapper.ProductSpuMapper">
+    <resultMap id="productSpuResultMap" type="ProductSpu">
+        <id property="id" column="id"/>
+        <result property="tenantId" column="tenant_id"/>
+        <result property="platform" column="platform"/>
+        <result property="platformSpuCode" column="platform_spu_code"/>
+        <result property="spuCode" column="spu_code"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="brandName" column="brand_name"/>
+        <result property="spuType" column="spu_type"/>
+        <result property="spuName" column="spu_name"/>
+        <result property="spuSubName" column="spu_sub_name"/>
+        <result property="salePrice" column="sale_price"/>
+        <result property="vipPrice" column="vip_price"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="mainPic" column="main_pic"/>
+        <result property="mediaInfo" column="media_info"/>
+        <result property="details" column="details"/>
+        <result property="ccc" column="is_ccc"/>
+        <result property="barCode" column="bar_code"/>
+        <result property="qrCode" column="qr_code"/>
+        <result property="group" column="is_group"/>
+        <result property="supplierSend" column="is_supplier_send"/>
+        <result property="channelList" column="channel_list"/>
+        <result property="productUserId" column="product_user_id"/>
+        <result property="productUserName" column="product_user_name"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="auditStatus" column="audit_status"/>
+        <result property="syncStatus" column="sync_status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="del" column="is_del"/>
+    </resultMap>
+
+    <sql id="productSpuBaseColumns">
+        t.`id`,
+        t.`tenant_id`,
+        t.`platform`,
+        t.`platform_spu_code`,
+        t.`spu_code`,
+        t.`category_id`,
+        t.`category_name`,
+        t.`brand_id`,
+        t.`brand_name`,
+        t.`spu_type`,
+        t.`spu_name`,
+        t.`spu_sub_name`,
+        t.`sale_price`,
+        t.`vip_price`,
+        t.`market_price`,
+        t.`main_pic`,
+        t.`media_info`,
+        t.`details`,
+        t.`is_ccc`,
+        t.`bar_code`,
+        t.`qr_code`,
+        t.`is_group`,
+        t.`is_supplier_send`,
+        t.`channel_list`,
+        t.`product_user_id`,
+        t.`product_user_name`,
+        t.`supplier_id`,
+        t.`supplier_name`,
+        t.`audit_status`,
+        t.`sync_status`,
+        t.`create_by`,
+        t.`create_time`,
+        t.`update_by`,
+        t.`update_time`,
+        t.`is_del`
+    </sql>
+
+    <select id="selectById" resultMap="productSpuResultMap">
+        select
+        <include refid="productSpuBaseColumns"/>
+        from `omp_product_spu` t where t.id = #{id}
+        AND t.`is_del` = 0
+    </select>
+
+
+    <select id="select" resultMap="productSpuResultMap">
+        SELECT
+        <include refid="productSpuBaseColumns"/>
+        FROM `omp_product_spu` t
+        <where>
+            <if test="q.platform != null and q.platform !=''">
+                AND t.`platform` = #{q.platform}
+            </if>
+            <if test="q.platformSpuCode != null and q.platformSpuCode !=''">
+                AND t.`platform_spu_code` = #{q.platformSpuCode}
+            </if>
+            <if test="q.brandId != null">
+                AND t.`brand_id` = #{q.brandId}
+            </if>
+            <if test="q.categoryId != null">
+                AND t.`category_id` = #{q.categoryId}
+            </if>
+            <if test="q.ccc != null">
+                AND t.`is_ccc` = #{q.ccc}
+            </if>
+            <if test="q.spuType != null">
+                AND t.`spu_type` = #{q.spuType}
+            </if>
+            <if test="q.tenantId != null">
+                AND t.`tenant_id` = #{q.tenantId}
+            </if>
+            <if test="q.id != null">
+                AND t.`id` = #{q.id}
+            </if>
+            <if test="q.spuCode != null and q.spuCode != ''">
+                AND t.`spu_code` = #{q.spuCode}
+            </if>
+            <if test="q.createTime != null">
+                AND t.create_time > #{q.createTime}
+            </if>
+        </where>
+        limit #{start}, #{end}
+    </select>
+
+</mapper>
