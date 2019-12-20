@@ -129,9 +129,11 @@ public class TestProduct1 {
     public void testQueryByPage(){
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
         FieldSortBuilder sortBuilder = SortBuilders.fieldSort("id").order(SortOrder.DESC);
+        //查询总数
         long total = elasticsearchTemplate.count(new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build(), Product.class);
         log.info(String.valueOf(total));
         long totalPage = total/10 + 1;
+        //分页查询
         for(int i = 0;i<totalPage;i++){
             log.info(i + "页");
             Pageable pageable = PageRequest.of(i, 10);
@@ -141,7 +143,7 @@ public class TestProduct1 {
                     .withPageable(pageable)
                     .build();
             List<Product> list = elasticsearchTemplate.queryForList(query, Product.class);
-            list.stream().forEach(e -> log.info(e.getId().toString()));
+            list.forEach(e -> log.info(e.getId().toString()));
 
         }
     }
