@@ -3,7 +3,6 @@ package data;
 import com.es.search.Application;
 import com.es.search.data.entity.ProductSpu;
 import com.es.search.data.service.IProductSpuService;
-import com.es.search.entity.Item;
 import com.es.search.entity.Product;
 import com.es.search.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +24,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,14 +58,13 @@ public class TestProduct1 {
         List<ProductSpu> list;
         List<Product> batch;
         Product product;
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 1; i < 1500; i++) {
             list = productSpuService.queryAllProducts(new ProductSpu(), i, 100);
             batch = new ArrayList<>();
             for (ProductSpu spuDTO : list) {
                 product = new Product();
                 BeanUtils.copyProperties(spuDTO, product);
                 batch.add(product);
-                log.info(product.getId().toString());
             }
             if(!batch.isEmpty()){
                 productRepository.saveAll(batch);
@@ -79,35 +74,49 @@ public class TestProduct1 {
 
     }
 
-
+    /**
+     * 查询所有
+     */
     @Test
-    public void testComplexQuery() throws ParseException {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+    public void testComplexQuery() {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
+        Iterable<Product>  items = this.productRepository.search(boolQueryBuilder);
+        for (Product product : items) {
+            log.info(product.toString());
+        }
+    }
 
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-01-01 00:00:00");
-        boolQueryBuilder
-                .must(QueryBuilders.matchQuery("spuName", "小天鹅"))
-                .must(QueryBuilders.matchQuery("attrs", "KaiPuLe"))
-                .mustNot(QueryBuilders.matchQuery("ccc", Boolean.TRUE.toString()))
-                .filter(QueryBuilders.rangeQuery("salePrice").from(699911))
-                .filter(QueryBuilders.rangeQuery("createTime").from(date.getTime()));
+    /**
+     * 查询待分页信息
+     */
+    @Test
+    public void testComplexQueryReturnPageInfo(){
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
+        SearchQuery query = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build();
+        Page<Product> pageList = this.productRepository.search(query);
+        for(Product product : pageList){
+            log.info(product.toString());
+        }
+    }
 
-        //排序
-        FieldSortBuilder sortBuilder1 = SortBuilders.fieldSort("createTime").order(SortOrder.DESC);
-        FieldSortBuilder sortBuilder2 = SortBuilders.fieldSort("salePrice").order(SortOrder.DESC);
-        //分页
-        Pageable pageable = PageRequest.of(20, 100);
+    /**
+     * 分页带排序查询
+     */
+    @Test
+    public void testComplexQueryByPage(){
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
+        FieldSortBuilder sortBuilder = SortBuilders.fieldSort("id").order(SortOrder.DESC);
+        Pageable pageable = PageRequest.of(3, 10);
 
         SearchQuery query = new NativeSearchQueryBuilder()
                 .withQuery(boolQueryBuilder)
-                .withSort(sortBuilder1)
-                .withSort(sortBuilder2)
+                .withSort(sortBuilder)
                 .withPageable(pageable)
                 .build();
 
         Page<Product> items = this.productRepository.search(query);
-        for (Product product : items) {
-            System.out.println(product);
+        for(Product product : items){
+            log.info(product.getId().toString());
         }
     }
 }

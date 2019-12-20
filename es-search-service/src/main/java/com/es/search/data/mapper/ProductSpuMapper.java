@@ -15,10 +15,9 @@ public interface ProductSpuMapper {
      * 条件查询
      * @param p 参数
      * @param start 起始
-     * @param end 结束
      * @return List<ProductSpu>
      */
-    List<ProductSpu> select(@Param("q") ProductSpu p, @Param("start")int start, @Param("end")int end);
+    List<ProductSpu> select(@Param("q") ProductSpu p, @Param("start")int start);
 
     /**
      * id查询

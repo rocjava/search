@@ -22,7 +22,6 @@ public class ProductSpuServiceImpl implements IProductSpuService {
     @Override
     public List<ProductSpu> queryAllProducts(ProductSpu spu, int page, int pageSize) {
         int start = (page -1) * pageSize;
-        int end = page * pageSize;
-        return   productSpuMapper.select(spu, start, end);
+        return   productSpuMapper.select(spu, start);
     }
 }

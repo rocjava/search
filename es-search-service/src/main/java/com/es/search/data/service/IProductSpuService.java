@@ -13,6 +13,8 @@ public interface IProductSpuService {
     /**
      * 查询所有商品
      * @param spu 商品参数
+     * @param page 页
+     *
      */
     List<ProductSpu> queryAllProducts(ProductSpu spu, int page, int pageSize);
 }

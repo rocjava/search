@@ -13,9 +13,9 @@ spring:
       cluster-nodes: 127.0.0.1:9300
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xx.xx.xx.xx:xx/xx?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-    username: xx
-    password: xx
+    url: jdbc:mysql://192.168.1.82:3306/omp_product?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: gtown
+    password: Gtown123!QA
     hikari:
       connection-test-query: select 1
       maximum-pool-size: 100
