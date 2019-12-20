@@ -82,7 +82,7 @@ public class TestProduct1 {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
         Iterable<Product>  items = this.productRepository.search(boolQueryBuilder);
         for (Product product : items) {
-            log.info(product.toString());
+            log.info(product.getId().toString());
         }
     }
 
@@ -97,6 +97,7 @@ public class TestProduct1 {
         for(Product product : pageList){
             log.info(product.toString());
         }
+
     }
 
     /**
@@ -117,6 +118,31 @@ public class TestProduct1 {
         Page<Product> items = this.productRepository.search(query);
         for(Product product : items){
             log.info(product.getId().toString());
+        }
+
+    }
+
+    /**
+     * 使用elasticsearchTemplate分页查询
+     */
+    @Test
+    public void testQueryByPage(){
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("spuName", "小天鹅"));
+        FieldSortBuilder sortBuilder = SortBuilders.fieldSort("id").order(SortOrder.DESC);
+        long total = elasticsearchTemplate.count(new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build(), Product.class);
+        log.info(String.valueOf(total));
+        long totalPage = total/10 + 1;
+        for(int i = 0;i<totalPage;i++){
+            log.info(i + "页");
+            Pageable pageable = PageRequest.of(i, 10);
+            SearchQuery query = new NativeSearchQueryBuilder()
+                    .withQuery(boolQueryBuilder)
+                    .withSort(sortBuilder)
+                    .withPageable(pageable)
+                    .build();
+            List<Product> list = elasticsearchTemplate.queryForList(query, Product.class);
+            list.stream().forEach(e -> log.info(e.getId().toString()));
+
         }
     }
 }
